@@ -47,7 +47,7 @@ public class Unpacker {
             packed = Long.parseLong(args[0]);
         }
         catch (NumberFormatException e) {
-            System.out.println("Arguments: int [--assembly]\nOr your number is too large");
+            System.err.println("Arguments: int [--assembly]\nOr your number is too large");
             System.exit(1);
         }
 

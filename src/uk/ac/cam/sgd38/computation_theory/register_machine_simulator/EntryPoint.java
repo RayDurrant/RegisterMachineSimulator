@@ -17,17 +17,17 @@ public class EntryPoint {
             } else if (args[0].equals("run")) {
                 RegisterMachine.main(Arrays.copyOfRange(args, 1, args.length));
             } else {
-                System.out.println("Arguments: (pack|unpack|run) args");
+                System.err.println("Arguments: (pack|unpack|run) args");
                 System.exit(1);
             }
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Arguments: (pack|unpack|run) args");
+            System.err.println("Arguments: (pack|unpack|run) args");
             System.exit(1);
         }
         catch (IOException e) {
-            System.out.println("An unknown IO Exception occurred.");
-            System.out.println("Message: " + e.getMessage());
+            System.err.println("An unknown IO Exception occurred.");
+            System.err.println("Message: " + e.getMessage());
             e.printStackTrace();
             System.exit(-1);
         }

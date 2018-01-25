@@ -106,21 +106,27 @@ public class RegisterMachine {
             }
 
             if (regStrings != null) {
-                for (String reg : regStrings)
+                for (String reg : regStrings) {
+                    int regValue = Integer.parseInt(reg);
+                    if (regValue < 0) {
+                        System.err.println("All registers must be nonnegative");
+                        System.exit(1);
+                    }
                     regs.add(Integer.parseInt(reg));
+                }
             }
 
         }
         catch (FileNotFoundException e) {
-            System.out.println("Cannot find file " + args[0]);
+            System.err.println("Cannot find file " + args[0]);
             System.exit(2);
         }
         catch (InstructionInterpretationException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             System.exit(3);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Arguments: (--packed int)|(filepath) [regs]");
+            System.err.println("Arguments: (--packed int)|(filepath) [regs]");
             System.exit(1);
         }
 

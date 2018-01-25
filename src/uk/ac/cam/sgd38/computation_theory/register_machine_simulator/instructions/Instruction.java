@@ -32,12 +32,16 @@ public interface Instruction {
                     case IncrementInstruction.ASSEMBLY_CODE:
                         register = Integer.parseInt(assemblyLine[1]);
                         int nextInstr = Integer.parseInt(assemblyLine[2]);
+                        if (register < 0 || nextInstr < 0)
+                            throw new InstructionInterpretationException(lineNum);
                         instructionList.add(new IncrementInstruction(register, nextInstr));
                         break;
                     case DecrementOrJumpInstruction.ASSEMBLY_CODE:
                         register = Integer.parseInt(assemblyLine[1]);
                         int nextIfNonZero = Integer.parseInt(assemblyLine[2]);
                         int nextIfZero = Integer.parseInt(assemblyLine[3]);
+                        if (register < 0 || nextIfNonZero < 0 || nextIfZero < 0)
+                            throw new InstructionInterpretationException(lineNum);
                         instructionList.add(new DecrementOrJumpInstruction(register, nextIfNonZero, nextIfZero));
                         break;
                     case HaltInstruction.ASSEMBLY_CODE:

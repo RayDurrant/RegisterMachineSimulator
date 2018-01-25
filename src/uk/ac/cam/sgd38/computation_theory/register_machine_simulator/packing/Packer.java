@@ -60,11 +60,11 @@ public class Packer {
             System.out.println(Long.toString(rm.packInstructions()));
         }
         catch (FileNotFoundException e) {
-            System.out.println("File at path " + path + " was not found.");
+            System.err.println("File at path " + path + " was not found.");
             System.exit(2);
         }
         catch(InstructionInterpretationException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             System.exit(3);
         }
     }
