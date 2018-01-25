@@ -1,7 +1,6 @@
 package uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions;
 
 import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.MachineState;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.Instruction;
 
 public class DecrementOrJumpInstruction implements Instruction {
 

@@ -1,9 +1,13 @@
 package uk.ac.cam.sgd38.computation_theory.register_machine_simulator;
 
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.HaltInstruction;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.Instruction;
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.*;
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing.Packer;
 import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing.Unpacker;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,10 +18,6 @@ public class RegisterMachine {
 
     public RegisterMachine(List<Instruction> instructions) {
         mInstructions = instructions;
-    }
-
-    public RegisterMachine(long instructions) {
-        mInstructions = Unpacker.unpackInstructions(instructions);
     }
 
     public int run(boolean verbose) {
@@ -46,6 +46,110 @@ public class RegisterMachine {
 
         //By convention, R0 is result of register machine
         return m.getRegister(0);
+    }
+
+    public String printInstructions() {
+        List<String> instructionStrings = new ArrayList<>();
+
+        for (int i = 0; i < mInstructions.size(); i++) {
+            instructionStrings.add("L_" + Integer.toString(i) + ": " + mInstructions.get(i).toString());
+        }
+
+        return String.join("\n", instructionStrings);
+    }
+
+    public String printAssembly() {
+        List<String> instructionStrings = new ArrayList<>();
+
+        for (int i = 0; i < mInstructions.size(); i++) {
+            instructionStrings.add(mInstructions.get(i).toAssemblyString());
+        }
+
+        return String.join("\n", instructionStrings);
+    }
+
+    public long packInstructions() {
+        return Packer.packInstructions(mInstructions);
+    }
+
+    private static Map<Integer, Integer> createRegisters(List<Integer> l) {
+        Map<Integer, Integer> regs = new TreeMap<>();
+
+        regs.put(0, 0);
+
+        int i = 1;
+        for (Integer val: l) {
+            regs.put(i, val);
+            i++;
+        }
+
+        return regs;
+    }
+
+    public static void main(String[] args) {
+        List<Instruction> l = null;
+        List<Integer> regs = new ArrayList<>();
+
+        try {
+            String regString;
+
+            if (args[0].equals("--packed")) {
+                long instrs = Long.parseLong(args[1]);
+                l = Unpacker.unpackInstructions(instrs);
+
+                if (args.length == 3)
+                    regString = args[2];
+                else if (args.length == 2)
+                    regString = null;
+                else throw new ArrayIndexOutOfBoundsException();
+            }
+            else {
+                String path = args[0];
+                l = Instruction.getInstructionsFromFile(path);
+                if (args.length == 2)
+                    regString = args[1];
+                else if (args.length == 1)
+                    regString = null;
+                else throw new ArrayIndexOutOfBoundsException();
+            }
+
+            if (regString != null) {
+
+                String[] registersAsString = regString.split(", *");
+
+                for (String reg : registersAsString)
+                    regs.add(Integer.parseInt(reg));
+            }
+
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Cannot find file " + args[0]);
+            System.exit(2);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        catch (InstructionInterpretationException e) {
+            System.out.println(e.getMessage());
+            System.exit(3);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("java RegisterMachine.class (--packed int)|(filepath) [regs]");
+            System.exit(1);
+        }
+
+        RegisterMachine rm = new RegisterMachine(l);
+
+        System.out.println("Instructions:");
+        System.out.println(rm.printInstructions());
+
+        System.out.println();
+        System.out.println("Program trace");
+        int res = rm.run(createRegisters(regs), true);
+
+        System.out.println();
+        System.out.println("Result = " + Integer.toString(res));
     }
 
 }

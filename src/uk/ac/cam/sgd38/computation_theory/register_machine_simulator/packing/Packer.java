@@ -1,11 +1,8 @@
 package uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing;
 
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.InstructionInterpreter;
 import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.InstructionInterpretationException;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.DecrementOrJumpInstruction;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.HaltInstruction;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.IncrementInstruction;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.Instruction;
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.RegisterMachine;
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -58,16 +55,17 @@ public class Packer {
 
         String path = args[0];
         try {
-            List<Instruction> l = InstructionInterpreter.getInstructionsFromFile(path);
-            System.out.println(packInstructions(l));
+            List<Instruction> l = Instruction.getInstructionsFromFile(path);
+            RegisterMachine rm = new RegisterMachine(l);
+            System.out.println(Long.toString(rm.packInstructions()));
         }
         catch (FileNotFoundException e) {
             System.out.println("File at path " + path + " was not found.");
-            System.exit(1);
+            System.exit(2);
         }
         catch(InstructionInterpretationException e) {
             System.out.println(e.getMessage());
-            System.exit(2);
+            System.exit(3);
         }
     }
 }

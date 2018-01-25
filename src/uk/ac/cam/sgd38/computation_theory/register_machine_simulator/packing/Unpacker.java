@@ -1,10 +1,7 @@
 package uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing;
 
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.InstructionInterpreter;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.DecrementOrJumpInstruction;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.HaltInstruction;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.IncrementInstruction;
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.Instruction;
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.RegisterMachine;
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,14 +51,12 @@ public class Unpacker {
             System.exit(1);
         }
 
-        List<Instruction> l = unpackInstructions(packed);
-
         String instructionString;
 
         if (args.length > 1 && args[1].equals("--assembly"))
-            instructionString = InstructionInterpreter.printAssembly(l);
+            instructionString = (new RegisterMachine(unpackInstructions(packed))).printAssembly();
         else
-            instructionString = InstructionInterpreter.printInstructions(l);
+            instructionString = (new RegisterMachine(unpackInstructions(packed))).printInstructions();
 
         System.out.println(instructionString);
 
