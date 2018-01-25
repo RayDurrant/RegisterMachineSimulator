@@ -72,6 +72,7 @@ Example:
 This will execute the file addr.regsrc on the registers configured as such:
 
 ```
+R_0 = 0
 R_1 = 5
 R_2 = 2
 ```
@@ -141,3 +142,5 @@ Each line of a file must be in one of the following formats:
 3. `DEC REGISTER LABEL_1 LABEL_2` will decrement `REGISTER` and jump to `LABEL_1` if `REGISTER` is greater than zero, otherwise it will jump to `LABEL_2`
 
 `REGISTER`, `NEXT_LABEL`, `LABEL_1`, and `LABEL_2` must be nonnegative integers.
+
+The first line of the file represents L_0 in a theoretical register machine, the second line represents L_1, and so on.
