@@ -4,7 +4,7 @@ A Java simulation of the register machine described in https://www.cl.cam.ac.uk/
 ##Installation
 
 ###As Binary
-The code will shortly be released as a standalone JAR file.
+The Java JAR file can be found in the /bin directory.
 
 ###From Source
 Upon compiling the source, EntryPoint.java is what is called by the JAR File.
