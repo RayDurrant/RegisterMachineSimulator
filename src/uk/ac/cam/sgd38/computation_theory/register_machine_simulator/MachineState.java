@@ -44,7 +44,7 @@ public class MachineState {
             registerNotation.add("R_" + Long.toString(register.getKey()) + ": " + Long.toString(register.getValue()));
         }
 
-        return "{" + String.join(",", registerNotation) + "}";
+        return "{" + String.join(", ", registerNotation) + "}";
     }
 
     public String printMachineState() {

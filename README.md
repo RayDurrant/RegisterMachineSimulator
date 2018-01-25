@@ -43,6 +43,17 @@ If `--assembly` is specified, the output is in a format which can be read by the
 
 Otherwise, the output is pretty-printed in notation analogous to the lecture notes.
 
+Example:
+
+`unpack 786432 --assembly`
+
+Output:
+
+```
+DEC 0 0 2
+HALT
+```
+
 ### Run Mode
 
 `run (--packed int)|(filename) [regs]`
@@ -60,10 +71,43 @@ Example:
 
 This will execute the file addr.regsrc on the registers configured as such:
 
+```
 R_1 = 5
 R_2 = 2
+```
 
-R_0 is the output register
+R_0 is the output register. Hence, the output will be:
+
+```
+Instructions:
+L_0: R_1- -> L_1, L_2
+L_1: R_0+ -> L_0
+L_2: R_2- -> L_3, L_4
+L_3: R_0+ -> L_2
+L_4: HALT
+
+Program trace
+L_0: {R_0: 0,R_1: 5,R_2: 2}
+L_1: {R_0: 0,R_1: 4,R_2: 2}
+L_0: {R_0: 1,R_1: 4,R_2: 2}
+L_1: {R_0: 1,R_1: 3,R_2: 2}
+L_0: {R_0: 2,R_1: 3,R_2: 2}
+L_1: {R_0: 2,R_1: 2,R_2: 2}
+L_0: {R_0: 3,R_1: 2,R_2: 2}
+L_1: {R_0: 3,R_1: 1,R_2: 2}
+L_0: {R_0: 4,R_1: 1,R_2: 2}
+L_1: {R_0: 4,R_1: 0,R_2: 2}
+L_0: {R_0: 5,R_1: 0,R_2: 2}
+L_2: {R_0: 5,R_1: 0,R_2: 2}
+L_3: {R_0: 5,R_1: 0,R_2: 1}
+L_2: {R_0: 6,R_1: 0,R_2: 1}
+L_3: {R_0: 6,R_1: 0,R_2: 0}
+L_2: {R_0: 7,R_1: 0,R_2: 0}
+L_4: {R_0: 7,R_1: 0,R_2: 0}
+Clean halt
+
+Result = 7
+```
 
 
 #### Run from packed integer
@@ -72,6 +116,21 @@ R_0 is the output register
 Example:
 
 `run --packed 786432 3`
+
+Runs with the output:
+
+```
+Instructions:
+L_0: R_0- -> L_0, L_2
+L_1: HALT
+
+Program trace
+L_0: {R_0: 0,R_1: 3}
+L_2: {R_0: 0,R_1: 3}
+Erroneous halt
+
+Result = 0
+```
 
 #### Assembly Code
 

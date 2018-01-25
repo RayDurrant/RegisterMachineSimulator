@@ -33,7 +33,7 @@ public class DecrementOrJumpInstruction implements Instruction {
     @Override
     public String toAssemblyString() {
         return ASSEMBLY_CODE + " " + Integer.toString(mRegister) + " " +
-                Integer.toString(mNextLabelIfZero) + " "  +
+                Integer.toString(mNextLabelIfNotZero) + " "  +
                 Integer.toString(mNextLabelIfZero);
     }
 
