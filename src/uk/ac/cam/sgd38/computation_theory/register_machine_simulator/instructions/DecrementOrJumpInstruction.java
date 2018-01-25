@@ -1,10 +1,19 @@
-package uk.ac.cam.sgd38.computation_theory.register_machine_simulator;
+package uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions;
 
-public class DecrementOrJumpInstruction implements Instruction{
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.MachineState;
+import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instructions.Instruction;
+
+public class DecrementOrJumpInstruction implements Instruction {
+
+    public static final String ASSEMBLY_CODE = "DEC";
 
     private int mNextLabelIfNotZero;
     private int mNextLabelIfZero;
     private int mRegister;
+
+    public int getRegister() {return mRegister;}
+    public int getNextLabelIfNotZero() {return mNextLabelIfNotZero;}
+    public int getNextLabelIfZero() {return mNextLabelIfZero;}
 
     public DecrementOrJumpInstruction(int register, int labelIfNotZero, int labelIfZero) {
         mRegister = register;
@@ -22,6 +31,15 @@ public class DecrementOrJumpInstruction implements Instruction{
         }
     }
 
+    @Override
+    public String toAssemblyString() {
+        return ASSEMBLY_CODE + " " + Integer.toString(mRegister) + " " +
+                Integer.toString(mNextLabelIfZero) + " "  +
+                Integer.toString(mNextLabelIfZero);
+    }
+
+
+    @Override
     public String toString() {
         return "R_" +
                 Integer.toString(mRegister) + "- -> L_" +

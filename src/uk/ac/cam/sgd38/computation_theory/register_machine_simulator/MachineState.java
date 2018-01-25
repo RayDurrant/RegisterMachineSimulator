@@ -41,14 +41,14 @@ public class MachineState {
     public String printRegisters() {
         List<String> registerNotation = new ArrayList<>();
         for (Map.Entry<Integer, Integer> register : mRegisters.entrySet()) {
-            registerNotation.add("R_" + Integer.toString(register.getKey()) + ": " + Integer.toString(register.getValue()));
+            registerNotation.add("R_" + Long.toString(register.getKey()) + ": " + Long.toString(register.getValue()));
         }
 
         return "{" + String.join(",", registerNotation) + "}";
     }
 
     public String printMachineState() {
-        return "L_" + Integer.toString(getCurrentInstruction()) + ": " + printRegisters();
+        return "L_" + Long.toString(getCurrentInstruction()) + ": " + printRegisters();
     }
 
 
