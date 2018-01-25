@@ -1,7 +1,5 @@
 package uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing;
 
-import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing.AngleBracketTuple;
-
 public class DoubleAngleBracketTuple implements AngleBracketTuple {
     private long mX;
     private long mY;
@@ -18,6 +16,10 @@ public class DoubleAngleBracketTuple implements AngleBracketTuple {
 
     @Override
     public long getPacked() {
+        if (mX > 63) {
+            System.err.println("Warning: Program is large and packed result may not reflect real value");
+        }
+
         return ((1 << mX) * (2 * mY + 1));
     }
 
@@ -29,8 +31,11 @@ public class DoubleAngleBracketTuple implements AngleBracketTuple {
     public DoubleAngleBracketTuple(long packed) {
         if (packed == 0) throw new IllegalArgumentException();
 
-        int x;
-        for(x = 0; packed % 2 == 0; packed = packed / 2, x++);
+        int x = 0;
+        while (packed % 2 == 0) {
+            packed = packed >>> 1;
+            x++;
+        }
 
         packed = packed >>> 1;
 

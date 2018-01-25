@@ -4,14 +4,9 @@ import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.instruction
 import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing.Packer;
 import uk.ac.cam.sgd38.computation_theory.register_machine_simulator.packing.Unpacker;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class RegisterMachine {
     List<Instruction> mInstructions;
@@ -86,9 +81,10 @@ public class RegisterMachine {
         return regs;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         List<Instruction> l = null;
         List<Integer> regs = new ArrayList<>();
+        String[] regStrings;
 
         try {
             String regString;
@@ -97,27 +93,20 @@ public class RegisterMachine {
                 long instrs = Long.parseLong(args[1]);
                 l = Unpacker.unpackInstructions(instrs);
 
-                if (args.length == 3)
-                    regString = args[2];
-                else if (args.length == 2)
-                    regString = null;
-                else throw new ArrayIndexOutOfBoundsException();
+                if (args.length > 2)
+                    regStrings = Arrays.copyOfRange(args, 2, args.length);
+                else regStrings = null;
             }
             else {
                 String path = args[0];
                 l = Instruction.getInstructionsFromFile(path);
-                if (args.length == 2)
-                    regString = args[1];
-                else if (args.length == 1)
-                    regString = null;
-                else throw new ArrayIndexOutOfBoundsException();
+                if (args.length > 1)
+                    regStrings = Arrays.copyOfRange(args, 1, args.length);
+                else regStrings = null;
             }
 
-            if (regString != null) {
-
-                String[] registersAsString = regString.split(", *");
-
-                for (String reg : registersAsString)
+            if (regStrings != null) {
+                for (String reg : regStrings)
                     regs.add(Integer.parseInt(reg));
             }
 
@@ -126,16 +115,12 @@ public class RegisterMachine {
             System.out.println("Cannot find file " + args[0]);
             System.exit(2);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (InstructionInterpretationException e) {
             System.out.println(e.getMessage());
             System.exit(3);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("java RegisterMachine.class (--packed int)|(filepath) [regs]");
+            System.out.println("Arguments: (--packed int)|(filepath) [regs]");
             System.exit(1);
         }
 
